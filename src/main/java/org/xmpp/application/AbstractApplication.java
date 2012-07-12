@@ -93,7 +93,7 @@ public abstract class AbstractApplication {
         initialize();
 
         if (null != processorList)
-            externalComponent.addProcesorList(processorList);
+            externalComponent.addProcessorList(processorList);
         if (null != messageProcessor)
             externalComponent.addMessageProcessor(messageProcessor);
     }

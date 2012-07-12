@@ -7,7 +7,6 @@ import org.xmpp.component.ResultReceiver;
 import org.xmpp.component.ServiceException;
 import org.xmpp.packet.IQ;
 import org.xmpp.packet.JID;
-import org.xmpp.packet.PacketError;
 import org.xmpp.packet.PacketError.Condition;
 import org.zoolu.tools.ConcurrentTimelineHashMap;
 
@@ -21,7 +20,7 @@ import java.util.List;
  */
 public abstract class AbstractServiceProcessor implements NamespaceProcessor {
     static final Logger log = Logger.getLogger(AbstractServiceProcessor.class);
-    protected ExternalComponent component;
+    protected ExternalComponent externalComponent;
     private final ConcurrentTimelineHashMap<String, IqRequest> pendingService = new ConcurrentTimelineHashMap<String, IqRequest>();
     private final ConcurrentTimelineHashMap<String, IqRequest> pendingServiceResult = new ConcurrentTimelineHashMap<String, IqRequest>();
     private int maxTries = 3;
@@ -30,8 +29,9 @@ public abstract class AbstractServiceProcessor implements NamespaceProcessor {
     private int requestCounter = 0;
 
     public void init() {
-        if (component != null) {
-            component.addProcessor(this);
+        log.info("Init AbstractServiceProcessor");
+        if (externalComponent != null) {
+            externalComponent.addProcessor(this);
         }
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractServiceProcessor implements NamespaceProcessor {
         if (iqRequest.getTries() < getMaxTries()) {
             iqRequest.incTries();
             log.debug("Querying Service: " + iqRequest.getRequest().toXML());
-            component.send(iqRequest.getRequest());
+            externalComponent.send(iqRequest.getRequest());
         } else {
             final String msg = iqRequest.getOriginalPacket().getClass().getCanonicalName() + " ID: " + getRequestId(iqRequest.getOriginalPacket());
             log.warn("Retries exceeded for: " + msg);
@@ -154,16 +154,16 @@ public abstract class AbstractServiceProcessor implements NamespaceProcessor {
         }
     }
 
-    public ExternalComponent getComponent() {
-        return component;
+    public ExternalComponent getExternalComponent() {
+        return externalComponent;
     }
 
-    public void setComponent(ExternalComponent component) {
-        this.component = component;
+    public void setExternalComponent(ExternalComponent externalComponent) {
+        this.externalComponent = externalComponent;
     }
 
     protected IQ _createPacketError(final IQ iq, final Condition condition) {
-        return component.createPacketError(iq, condition);
+        return externalComponent.createPacketError(iq, condition);
     }
 
     public long getTimeout() {
@@ -190,7 +190,7 @@ public abstract class AbstractServiceProcessor implements NamespaceProcessor {
         this.timeoutInterval = timeoutInterval;
     }
 
-    public JID getComponentJID() {
-        return component.getJID();
+    public JID getExternalComponentJID() {
+        return externalComponent.getJID();
     }
 }

@@ -26,28 +26,28 @@ public class ExternalComponent extends AbstractComponent {
     private ExternalComponentManager manager;
 
     /**
-     * The XMPP domain to which this component is registered to.
+     * The XMPP domain to which this externalComponent is registered to.
      */
     private final String serverDomain;
 
     /**
-     * The name of this component.
+     * The name of this externalComponent.
      */
     private final String name;
 
     /**
-     * The description of this component.
+     * The description of this externalComponent.
      */
     private final String description;
 
     private final JID jid;
 
     /**
-     * Create a new component which provides weather information.
+     * Create a new externalComponent which provides weather information.
      *
-     * @param name         The name of this component.
-     * @param description  The name of this component.
-     * @param serverDomain The XMPP domain to which this component is registered to.
+     * @param name         The name of this externalComponent.
+     * @param description  The name of this externalComponent.
+     * @param serverDomain The XMPP domain to which this externalComponent is registered to.
      */
     public ExternalComponent(final String name, final String description, String serverDomain) {
         super(20, 1000, false);
@@ -198,14 +198,6 @@ public class ExternalComponent extends AbstractComponent {
         final JID fromJid = iq.getFrom();
         if (null == fromJid) return;
 
-        // Get the child element.
-        final Element e = iq.getChildElement();
-        if (null == e) return;
-
-        // Get namespace.
-        final Namespace namespace = e.getNamespace();
-        if (null == namespace) return;
-
         for (final List<NamespaceProcessor> npl : processors.values()) {
             for (final NamespaceProcessor np : npl)
                 np.processIQResult(iq);
@@ -213,8 +205,7 @@ public class ExternalComponent extends AbstractComponent {
 
     }
 
-
-    public void addProcesorList(final List<NamespaceProcessor> processorList){
+    public void addProcessorList(final List<NamespaceProcessor> processorList){
         for (NamespaceProcessor np: processorList)
             addProcessor(np);
     }
