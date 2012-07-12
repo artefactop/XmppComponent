@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public abstract class AbstractNamespaceProcessor implements NamespaceProcessor {
     private ArrayList<String> whiteListGet;
     private ArrayList<String> whiteListSet;
-    protected String namespace;
-    private ExternalComponent externalComponent;
     private ThrottleManager throttleManager;
+    protected String namespace;
+    protected ExternalComponent externalComponent;
 
     public void setWhiteListGet(ArrayList<String> whiteListGet){
         this.whiteListGet = new ArrayList<String>(whiteListGet);
@@ -50,19 +50,15 @@ public abstract class AbstractNamespaceProcessor implements NamespaceProcessor {
         return namespace;
     }
 
-    public void setNamespace(String namespace){
-        this.namespace = namespace;
-    }
+    public abstract void setNamespace(String namespace);
 
     public ExternalComponent getExternalComponent() {
         return externalComponent;
     }
 
-    public void setExternalComponent(ExternalComponent externalComponent) {
-        this.externalComponent = externalComponent;
-    }
+    public abstract void setExternalComponent(ExternalComponent externalComponent);
 
-    public void setThrottleManager(ThrottleManager throttleManager) {
+    public void setThrottleManager(ThrottleManager throttleManager){
         this.throttleManager = throttleManager;
     }
 }
