@@ -3,7 +3,7 @@ package org.xmpp.component;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
-import org.yuilop.stroke.ExternalComponentManager;
+import org.lib.stroke.ExternalComponentManager;
 import org.xmpp.packet.*;
 import org.xmpp.packet.PacketError.Condition;
 import org.xmpp.processor.MessageProcessor;

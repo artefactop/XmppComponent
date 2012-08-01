@@ -5,7 +5,7 @@ import org.xmpp.component.ComponentException;
 import org.xmpp.component.ExternalComponent;
 import org.xmpp.processor.MessageProcessor;
 import org.xmpp.processor.NamespaceProcessor;
-import org.yuilop.stroke.ExternalComponentManager;
+import org.lib.stroke.ExternalComponentManager;
 
 import java.util.ArrayList;
 
