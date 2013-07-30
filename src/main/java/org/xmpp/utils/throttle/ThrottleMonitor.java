@@ -36,50 +36,46 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ThrottleMonitor {
 
-    private final AtomicLong lastTimestamp = new AtomicLong(0);
+    private final AtomicLong lastTimestamp = new AtomicLong(System.currentTimeMillis());
     private int maxPerPeriod = 60;
     private final AtomicInteger packetsSent = new AtomicInteger(0);
     private int periodInterval = 60000;
 
-    public ThrottleMonitor() {
-        reset();
-    }
-
     public ThrottleMonitor(int maxPerPeriod, int periodInterval) {
         this.maxPerPeriod = maxPerPeriod;
         this.periodInterval = periodInterval;
-        reset();
     }
 
-    public boolean accept() {
-        if (packetsSent.incrementAndGet() > maxPerPeriod) {
-            long delta = System.currentTimeMillis() - lastTimestamp.get();
-            if (delta <= periodInterval) {
-                // Ignore The Packet
-                lastTimestamp.set(System.currentTimeMillis() - periodInterval
-                        / 2);
-                return false;
-            } else {
-                reset(delta);
-                return packetsSent.get() <= maxPerPeriod;
-            }
-        }
-        return true;
+    public ThrottleMonitor() {
     }
 
-    public void reset() {
+    protected void update() {
+        lastTimestamp.set(System.currentTimeMillis());
+    }
+
+    protected void reset() {
         packetsSent.set(0);
         lastTimestamp.set(System.currentTimeMillis());
     }
 
-    private void reset(final long delta) {
-        if (packetsSent.get() > maxPerPeriod) {
-            if (packetsSent.addAndGet(-(int) ((Math.floor(delta
-                    / periodInterval)) * maxPerPeriod)) < 0) {
-                packetsSent.set(0);
-            }
-        }
+    protected void reset(final int num) {
+        packetsSent.set(num);
         lastTimestamp.set(System.currentTimeMillis());
     }
 
+    public AtomicLong getLastTimestamp() {
+        return lastTimestamp;
+    }
+
+    public int getMaxPerPeriod() {
+        return maxPerPeriod;
+    }
+
+    public AtomicInteger getPacketsSent() {
+        return packetsSent;
+    }
+
+    public int getPeriodInterval() {
+        return periodInterval;
+    }
 }
