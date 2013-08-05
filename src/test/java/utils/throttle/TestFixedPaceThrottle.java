@@ -32,7 +32,7 @@ public class TestFixedPaceThrottle extends TestCase {
     public void testFixedPaceBlock() {
 
         final int maxPerPeriod = 10;
-        final int period = 2500;
+        final int period = 500;
         final String key = "test";
 
         final FixedPaceThrottlePolicy policy = new FixedPaceThrottlePolicy();
@@ -45,17 +45,27 @@ public class TestFixedPaceThrottle extends TestCase {
             s = System.currentTimeMillis();
 
             for (int i = 0; i < maxPerPeriod; i++) {
+                System.out.println("I: " + i);
                 assertTrue(manager.accept(key));
             }
 
-            assertFalse(manager.accept(key));
+            for (int l = 0; l < 5; l++)
+                assertFalse(manager.accept(key));
 
             d = period - (System.currentTimeMillis() - s);
 
             if (d > 0)
                 try {
-                    Thread.sleep(d + 10);
-                    System.out.println("Round: " + j);
+                    final int sp = 10;
+                    final int splitP = (int)Math.floor(d / sp);
+
+                    for (int r = 0; r < sp; r++){
+                        assertFalse(manager.accept(key));
+                        Thread.sleep(splitP);
+                    }
+
+                    Thread.sleep(splitP);
+                    System.out.println("Success Round: " + j);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

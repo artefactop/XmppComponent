@@ -30,7 +30,6 @@ public class FixedPaceThrottlePolicy implements ThrottlePolicy {
         if (throttleMonitor.getPacketsSent().incrementAndGet() > throttleMonitor.getMaxPerPeriod()) {
             long delta = System.currentTimeMillis() - throttleMonitor.getLastTimestamp().get();
             if (delta <= throttleMonitor.getPeriodInterval()) {
-                throttleMonitor.update();
                 // Ignore The Packet
                 return false;
             } else {
