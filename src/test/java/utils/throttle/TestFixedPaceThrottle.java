@@ -59,7 +59,7 @@ public class TestFixedPaceThrottle extends TestCase {
                     final int sp = 10;
                     final int splitP = (int)Math.floor(d / sp);
 
-                    for (int r = 0; r < sp; r++){
+                    for (int r = 0; r < sp-1; r++){
                         assertFalse(manager.accept(key));
                         Thread.sleep(splitP);
                     }
