@@ -57,9 +57,9 @@ public class TestFixedPaceThrottle extends TestCase {
             if (d > 0)
                 try {
                     final int sp = 10;
-                    final int splitP = (int)Math.floor(d / sp);
+                    final int splitP = (int) Math.floor(d / sp);
 
-                    for (int r = 0; r < sp-1; r++){
+                    for (int r = 0; r < sp - 1; r++) {
                         assertFalse(manager.accept(key));
                         Thread.sleep(splitP);
                     }
@@ -70,6 +70,11 @@ public class TestFixedPaceThrottle extends TestCase {
                     e.printStackTrace();
                 }
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
